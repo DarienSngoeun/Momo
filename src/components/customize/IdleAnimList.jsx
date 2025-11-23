@@ -1,18 +1,26 @@
 import { Check } from 'lucide-react';
 import { usePetStore } from '../../store/usePetStore';
+import { getAllAnimationPacks } from '../../utils/petRegistry';
 
-const availableIdleAnimations = [
-  { key: 'idle', name: 'Idle', description: 'Standing still' },
-  { key: 'walk', name: 'Walk', description: 'Walking around' },
-];
+// Map of all available animations
+const allAvailableAnimations = {
+  'idle': { key: 'idle', name: 'Idle', description: 'Standing still' },
+  'walk': { key: 'walk', name: 'Walk', description: 'Walking around' },
+  'roll': { key: 'roll', name: 'Roll', description: 'Playful roll' },
+  'fly': { key: 'fly', name: 'Fly', description: 'Soaring through the air' },
+  'throwing': { key: 'throwing', name: 'Throwing', description: 'Throwing something' },
+  'hit': { key: 'hit', name: 'Hit', description: 'Shows concern' },
+  'dead': { key: 'dead', name: 'Sleep', description: 'Taking a rest' },
+};
 
 export function IdleAnimList({ onSelectAnimation }) {
   const activeIdleKey = usePetStore((state) => state.activeIdleKey);
   const ownedAnimations = usePetStore((state) => state.ownedAnimations);
 
-  const ownedIdleAnims = availableIdleAnimations.filter((anim) =>
-    ownedAnimations.includes(anim.key)
-  );
+  // Filter to show only animations the user owns
+  const ownedIdleAnims = ownedAnimations
+    .map(key => allAvailableAnimations[key])
+    .filter(anim => anim !== undefined);
 
   if (ownedIdleAnims.length === 0) {
     return (

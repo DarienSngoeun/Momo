@@ -27,12 +27,6 @@ export function PetCard({ pet, onPurchase, onPreview, isActive }) {
           alt={pet.name}
           className="w-full h-32 object-contain"
         />
-        {isOwned && (
-          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-            <Check size={12} />
-            Owned
-          </div>
-        )}
       </div>
 
       <h3 className="font-semibold text-gray-900 mb-1">{pet.name}</h3>

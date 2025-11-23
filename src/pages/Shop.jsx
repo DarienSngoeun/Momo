@@ -76,7 +76,7 @@ function Shop() {
     if (type === 'pet') {
       result = purchasePet(item.id, item.price);
     } else if (type === 'animation') {
-      result = purchaseAnimation(item.id, item.price);
+      result = purchaseAnimation(item.key, item.price);
     } else if (type === 'theme') {
       result = purchaseTheme(item.id, item.price);
     }

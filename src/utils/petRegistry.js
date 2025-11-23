@@ -135,11 +135,48 @@ const speciesFrameCounts = {
 };
 
 // Generate frame paths for animations with species-specific counts
+// Map species names to their asset folder names
+const speciesAssetFolders = {
+  cat: 'cute-cats-assets',
+  raccoon: 'cute-raccoons-assets',
+  bear: 'cute-bears-assets',
+  bunny: 'cartoon-bunnies-assets',
+  koala: 'cute-koalas-assets',
+  panda: 'cute-pandas-assets',
+  penguin: 'cartoon-penguins-assets',
+  capybara: 'cartoon-capybaras-assets',
+  pig: 'cute-pigs-assets',
+  duckling: 'cute-ducklings-assets',
+  beaver: 'funny-beavers-assets',
+  redpanda: 'red-pandas-assets',
+};
+
 function generateFramePaths(species, character, animation, count) {
   const frames = [];
   // If count not provided, use species-specific count
   const frameCount =
     count !== undefined ? count : speciesFrameCounts[species][animation];
+
+  // Get the asset folder name for this species
+  const assetFolder = speciesAssetFolders[species];
+  
+  // Convert character01 -> Character01
+  const characterNum = character.replace('character', '');
+  const characterFolder = `Character${characterNum}`;
+  
+  // Convert animation name to Title Case (idle -> Idle, stuned -> Stuned, etc.)
+  const animationFolder = animation.charAt(0).toUpperCase() + animation.slice(1);
+
+  // Species that use lowercase "walk" in their file names (inconsistent asset naming)
+  const lowercaseWalkSpecies = ['capybara', 'duckling', 'pig', 'beaver', 'redpanda'];
+  
+  // Determine the actual animation name in the file (most use Title Case, some use lowercase "walk")
+  const animationInFileName = (animation === 'walk' && lowercaseWalkSpecies.includes(species)) 
+    ? 'walk' 
+    : animationFolder;
+
+  // Penguins use "All Characters-" prefix, others use "Characters-"
+  const filePrefix = species === 'penguin' ? 'All Characters' : 'Characters';
 
   for (let i = 0; i < frameCount; i++) {
     // Roll animation uses single-digit numbering without padding (0, 1, 2...)
@@ -147,11 +184,7 @@ function generateFramePaths(species, character, animation, count) {
     const frameNum =
       animation === "roll" ? String(i) : String(i).padStart(2, "0");
     frames.push(
-      `/pets/${species}/${character}/${animation}/Characters-${
-        character.charAt(0).toUpperCase() + character.slice(1)
-      }-${
-        animation.charAt(0).toUpperCase() + animation.slice(1)
-      }_${frameNum}.png`
+      `/assets/${assetFolder}/Png/${characterFolder}/${animationFolder}/${filePrefix}-${characterFolder}-${animationInFileName}_${frameNum}.png`
     );
   }
   return frames;
@@ -164,7 +197,7 @@ export const petRegistry = {
     name: "Classic Cat",
     species: "cat",
     character: "character01",
-    thumbnail: "/pets/cat/character01/thumbnail.png",
+    thumbnail: "/assets/cute-cats-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("cat", "character01", "idle", 20),
@@ -211,7 +244,7 @@ export const petRegistry = {
     name: "Cheerful Cat",
     species: "cat",
     character: "character02",
-    thumbnail: "/pets/cat/character02/thumbnail.png",
+    thumbnail: "/assets/cute-cats-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("cat", "character02", "idle", 20),
@@ -258,7 +291,7 @@ export const petRegistry = {
     name: "Sleepy Cat",
     species: "cat",
     character: "character03",
-    thumbnail: "/pets/cat/character03/thumbnail.png",
+    thumbnail: "/assets/cute-cats-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("cat", "character03", "idle", 20),
@@ -305,7 +338,7 @@ export const petRegistry = {
     name: "Classic Bear",
     species: "bear",
     character: "character01",
-    thumbnail: "/pets/bear/character01/thumbnail.png",
+    thumbnail: "/assets/cute-bears-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bear", "character01", "idle", 20),
@@ -352,7 +385,7 @@ export const petRegistry = {
     name: "Cheerful Bear",
     species: "bear",
     character: "character02",
-    thumbnail: "/pets/bear/character02/thumbnail.png",
+    thumbnail: "/assets/cute-bears-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bear", "character02", "idle", 20),
@@ -399,7 +432,7 @@ export const petRegistry = {
     name: "Sleepy Bear",
     species: "bear",
     character: "character03",
-    thumbnail: "/pets/bear/character03/thumbnail.png",
+    thumbnail: "/assets/cute-bears-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bear", "character03", "idle", 20),
@@ -446,7 +479,7 @@ export const petRegistry = {
     name: "Classic Panda",
     species: "panda",
     character: "character01",
-    thumbnail: "/pets/panda/character01/thumbnail.png",
+    thumbnail: "/assets/cute-pandas-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("panda", "character01", "idle", 20),
@@ -493,7 +526,7 @@ export const petRegistry = {
     name: "Cheerful Panda",
     species: "panda",
     character: "character02",
-    thumbnail: "/pets/panda/character02/thumbnail.png",
+    thumbnail: "/assets/cute-pandas-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("panda", "character02", "idle", 20),
@@ -540,7 +573,7 @@ export const petRegistry = {
     name: "Sleepy Panda",
     species: "panda",
     character: "character03",
-    thumbnail: "/pets/panda/character03/thumbnail.png",
+    thumbnail: "/assets/cute-pandas-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("panda", "character03", "idle", 20),
@@ -587,7 +620,7 @@ export const petRegistry = {
     name: "Classic Bunny",
     species: "bunny",
     character: "character01",
-    thumbnail: "/pets/bunny/character01/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character01", "idle", 20),
@@ -634,7 +667,7 @@ export const petRegistry = {
     name: "Cheerful Bunny",
     species: "bunny",
     character: "character02",
-    thumbnail: "/pets/bunny/character02/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character02", "idle", 20),
@@ -681,7 +714,7 @@ export const petRegistry = {
     name: "Sleepy Bunny",
     species: "bunny",
     character: "character03",
-    thumbnail: "/pets/bunny/character03/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character03", "idle", 20),
@@ -728,7 +761,7 @@ export const petRegistry = {
     name: "Playful Bunny",
     species: "bunny",
     character: "character04",
-    thumbnail: "/pets/bunny/character04/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character04", "idle", 20),
@@ -775,7 +808,7 @@ export const petRegistry = {
     name: "Shy Bunny",
     species: "bunny",
     character: "character05",
-    thumbnail: "/pets/bunny/character05/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character05", "idle", 20),
@@ -822,7 +855,7 @@ export const petRegistry = {
     name: "Energetic Bunny",
     species: "bunny",
     character: "character06",
-    thumbnail: "/pets/bunny/character06/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character06", "idle", 20),
@@ -869,7 +902,7 @@ export const petRegistry = {
     name: "Gentle Bunny",
     species: "bunny",
     character: "character07",
-    thumbnail: "/pets/bunny/character07/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character07", "idle", 20),
@@ -916,7 +949,7 @@ export const petRegistry = {
     name: "Curious Bunny",
     species: "bunny",
     character: "character08",
-    thumbnail: "/pets/bunny/character08/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character08", "idle", 20),
@@ -963,7 +996,7 @@ export const petRegistry = {
     name: "Brave Bunny",
     species: "bunny",
     character: "character09",
-    thumbnail: "/pets/bunny/character09/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character09", "idle", 20),
@@ -1010,7 +1043,7 @@ export const petRegistry = {
     name: "Sweet Bunny",
     species: "bunny",
     character: "character10",
-    thumbnail: "/pets/bunny/character10/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character10", "idle", 20),
@@ -1057,7 +1090,7 @@ export const petRegistry = {
     name: "Silly Bunny",
     species: "bunny",
     character: "character11",
-    thumbnail: "/pets/bunny/character11/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character11", "idle", 20),
@@ -1104,7 +1137,7 @@ export const petRegistry = {
     name: "Wise Bunny",
     species: "bunny",
     character: "character12",
-    thumbnail: "/pets/bunny/character12/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character12", "idle", 20),
@@ -1151,7 +1184,7 @@ export const petRegistry = {
     name: "Cool Bunny",
     species: "bunny",
     character: "character13",
-    thumbnail: "/pets/bunny/character13/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character13", "idle", 20),
@@ -1198,7 +1231,7 @@ export const petRegistry = {
     name: "Warm Bunny",
     species: "bunny",
     character: "character14",
-    thumbnail: "/pets/bunny/character14/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character14", "idle", 20),
@@ -1245,7 +1278,7 @@ export const petRegistry = {
     name: "Friendly Bunny",
     species: "bunny",
     character: "character15",
-    thumbnail: "/pets/bunny/character15/thumbnail.png",
+    thumbnail: "/assets/cartoon-bunnies-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("bunny", "character15", "idle", 20),
@@ -1292,7 +1325,7 @@ export const petRegistry = {
     name: "Classic Capybara",
     species: "capybara",
     character: "character01",
-    thumbnail: "/pets/capybara/character01/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character01", "idle", 20),
@@ -1339,7 +1372,7 @@ export const petRegistry = {
     name: "Cheerful Capybara",
     species: "capybara",
     character: "character02",
-    thumbnail: "/pets/capybara/character02/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character02", "idle", 20),
@@ -1386,7 +1419,7 @@ export const petRegistry = {
     name: "Sleepy Capybara",
     species: "capybara",
     character: "character03",
-    thumbnail: "/pets/capybara/character03/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character03", "idle", 20),
@@ -1433,7 +1466,7 @@ export const petRegistry = {
     name: "Playful Capybara",
     species: "capybara",
     character: "character04",
-    thumbnail: "/pets/capybara/character04/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character04", "idle", 20),
@@ -1480,7 +1513,7 @@ export const petRegistry = {
     name: "Shy Capybara",
     species: "capybara",
     character: "character05",
-    thumbnail: "/pets/capybara/character05/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character05", "idle", 20),
@@ -1527,7 +1560,7 @@ export const petRegistry = {
     name: "Energetic Capybara",
     species: "capybara",
     character: "character06",
-    thumbnail: "/pets/capybara/character06/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character06", "idle", 20),
@@ -1574,7 +1607,7 @@ export const petRegistry = {
     name: "Gentle Capybara",
     species: "capybara",
     character: "character07",
-    thumbnail: "/pets/capybara/character07/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character07", "idle", 20),
@@ -1621,7 +1654,7 @@ export const petRegistry = {
     name: "Curious Capybara",
     species: "capybara",
     character: "character08",
-    thumbnail: "/pets/capybara/character08/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character08", "idle", 20),
@@ -1668,7 +1701,7 @@ export const petRegistry = {
     name: "Brave Capybara",
     species: "capybara",
     character: "character09",
-    thumbnail: "/pets/capybara/character09/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character09", "idle", 20),
@@ -1715,7 +1748,7 @@ export const petRegistry = {
     name: "Sweet Capybara",
     species: "capybara",
     character: "character10",
-    thumbnail: "/pets/capybara/character10/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character10", "idle", 20),
@@ -1762,7 +1795,7 @@ export const petRegistry = {
     name: "Silly Capybara",
     species: "capybara",
     character: "character11",
-    thumbnail: "/pets/capybara/character11/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character11", "idle", 20),
@@ -1809,7 +1842,7 @@ export const petRegistry = {
     name: "Wise Capybara",
     species: "capybara",
     character: "character12",
-    thumbnail: "/pets/capybara/character12/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character12", "idle", 20),
@@ -1856,7 +1889,7 @@ export const petRegistry = {
     name: "Cool Capybara",
     species: "capybara",
     character: "character13",
-    thumbnail: "/pets/capybara/character13/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character13", "idle", 20),
@@ -1903,7 +1936,7 @@ export const petRegistry = {
     name: "Warm Capybara",
     species: "capybara",
     character: "character14",
-    thumbnail: "/pets/capybara/character14/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character14", "idle", 20),
@@ -1950,7 +1983,7 @@ export const petRegistry = {
     name: "Friendly Capybara",
     species: "capybara",
     character: "character15",
-    thumbnail: "/pets/capybara/character15/thumbnail.png",
+    thumbnail: "/assets/cartoon-capybaras-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("capybara", "character15", "idle", 20),
@@ -1997,7 +2030,7 @@ export const petRegistry = {
     name: "Classic Penguin",
     species: "penguin",
     character: "character01",
-    thumbnail: "/pets/penguin/character01/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character01/Idle/All Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character01", "idle", 20),
@@ -2044,7 +2077,7 @@ export const petRegistry = {
     name: "Cheerful Penguin",
     species: "penguin",
     character: "character02",
-    thumbnail: "/pets/penguin/character02/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character02/Idle/All Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character02", "idle", 20),
@@ -2091,7 +2124,7 @@ export const petRegistry = {
     name: "Sleepy Penguin",
     species: "penguin",
     character: "character03",
-    thumbnail: "/pets/penguin/character03/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character03/Idle/All Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character03", "idle", 20),
@@ -2138,7 +2171,7 @@ export const petRegistry = {
     name: "Playful Penguin",
     species: "penguin",
     character: "character04",
-    thumbnail: "/pets/penguin/character04/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character04/Idle/All Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character04", "idle", 20),
@@ -2185,7 +2218,7 @@ export const petRegistry = {
     name: "Shy Penguin",
     species: "penguin",
     character: "character05",
-    thumbnail: "/pets/penguin/character05/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character05/Idle/All Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character05", "idle", 20),
@@ -2232,7 +2265,7 @@ export const petRegistry = {
     name: "Energetic Penguin",
     species: "penguin",
     character: "character06",
-    thumbnail: "/pets/penguin/character06/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character06/Idle/All Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character06", "idle", 20),
@@ -2279,7 +2312,7 @@ export const petRegistry = {
     name: "Gentle Penguin",
     species: "penguin",
     character: "character07",
-    thumbnail: "/pets/penguin/character07/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character07/Idle/All Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character07", "idle", 20),
@@ -2326,7 +2359,7 @@ export const petRegistry = {
     name: "Curious Penguin",
     species: "penguin",
     character: "character08",
-    thumbnail: "/pets/penguin/character08/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character08/Idle/All Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character08", "idle", 20),
@@ -2373,7 +2406,7 @@ export const petRegistry = {
     name: "Brave Penguin",
     species: "penguin",
     character: "character09",
-    thumbnail: "/pets/penguin/character09/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character09/Idle/All Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character09", "idle", 20),
@@ -2420,7 +2453,7 @@ export const petRegistry = {
     name: "Sweet Penguin",
     species: "penguin",
     character: "character10",
-    thumbnail: "/pets/penguin/character10/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character10/Idle/All Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character10", "idle", 20),
@@ -2467,7 +2500,7 @@ export const petRegistry = {
     name: "Silly Penguin",
     species: "penguin",
     character: "character11",
-    thumbnail: "/pets/penguin/character11/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character11/Idle/All Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character11", "idle", 20),
@@ -2514,7 +2547,7 @@ export const petRegistry = {
     name: "Wise Penguin",
     species: "penguin",
     character: "character12",
-    thumbnail: "/pets/penguin/character12/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character12/Idle/All Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character12", "idle", 20),
@@ -2561,7 +2594,7 @@ export const petRegistry = {
     name: "Cool Penguin",
     species: "penguin",
     character: "character13",
-    thumbnail: "/pets/penguin/character13/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character13/Idle/All Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character13", "idle", 20),
@@ -2608,7 +2641,7 @@ export const petRegistry = {
     name: "Warm Penguin",
     species: "penguin",
     character: "character14",
-    thumbnail: "/pets/penguin/character14/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character14/Idle/All Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character14", "idle", 20),
@@ -2655,7 +2688,7 @@ export const petRegistry = {
     name: "Friendly Penguin",
     species: "penguin",
     character: "character15",
-    thumbnail: "/pets/penguin/character15/thumbnail.png",
+    thumbnail: "/assets/cartoon-penguins-assets/Png/Character15/Idle/All Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("penguin", "character15", "idle", 20),
@@ -2702,7 +2735,7 @@ export const petRegistry = {
     name: "Classic Duckling",
     species: "duckling",
     character: "character01",
-    thumbnail: "/pets/duckling/character01/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character01", "idle", 20),
@@ -2749,7 +2782,7 @@ export const petRegistry = {
     name: "Cheerful Duckling",
     species: "duckling",
     character: "character02",
-    thumbnail: "/pets/duckling/character02/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character02", "idle", 20),
@@ -2796,7 +2829,7 @@ export const petRegistry = {
     name: "Sleepy Duckling",
     species: "duckling",
     character: "character03",
-    thumbnail: "/pets/duckling/character03/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character03", "idle", 20),
@@ -2843,7 +2876,7 @@ export const petRegistry = {
     name: "Playful Duckling",
     species: "duckling",
     character: "character04",
-    thumbnail: "/pets/duckling/character04/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character04", "idle", 20),
@@ -2890,7 +2923,7 @@ export const petRegistry = {
     name: "Shy Duckling",
     species: "duckling",
     character: "character05",
-    thumbnail: "/pets/duckling/character05/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character05", "idle", 20),
@@ -2937,7 +2970,7 @@ export const petRegistry = {
     name: "Energetic Duckling",
     species: "duckling",
     character: "character06",
-    thumbnail: "/pets/duckling/character06/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character06", "idle", 20),
@@ -2984,7 +3017,7 @@ export const petRegistry = {
     name: "Gentle Duckling",
     species: "duckling",
     character: "character07",
-    thumbnail: "/pets/duckling/character07/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character07", "idle", 20),
@@ -3031,7 +3064,7 @@ export const petRegistry = {
     name: "Curious Duckling",
     species: "duckling",
     character: "character08",
-    thumbnail: "/pets/duckling/character08/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character08", "idle", 20),
@@ -3078,7 +3111,7 @@ export const petRegistry = {
     name: "Brave Duckling",
     species: "duckling",
     character: "character09",
-    thumbnail: "/pets/duckling/character09/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character09", "idle", 20),
@@ -3125,7 +3158,7 @@ export const petRegistry = {
     name: "Sweet Duckling",
     species: "duckling",
     character: "character10",
-    thumbnail: "/pets/duckling/character10/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character10", "idle", 20),
@@ -3172,7 +3205,7 @@ export const petRegistry = {
     name: "Silly Duckling",
     species: "duckling",
     character: "character11",
-    thumbnail: "/pets/duckling/character11/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character11", "idle", 20),
@@ -3219,7 +3252,7 @@ export const petRegistry = {
     name: "Wise Duckling",
     species: "duckling",
     character: "character12",
-    thumbnail: "/pets/duckling/character12/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character12", "idle", 20),
@@ -3266,7 +3299,7 @@ export const petRegistry = {
     name: "Cool Duckling",
     species: "duckling",
     character: "character13",
-    thumbnail: "/pets/duckling/character13/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character13", "idle", 20),
@@ -3313,7 +3346,7 @@ export const petRegistry = {
     name: "Warm Duckling",
     species: "duckling",
     character: "character14",
-    thumbnail: "/pets/duckling/character14/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character14", "idle", 20),
@@ -3360,7 +3393,7 @@ export const petRegistry = {
     name: "Friendly Duckling",
     species: "duckling",
     character: "character15",
-    thumbnail: "/pets/duckling/character15/thumbnail.png",
+    thumbnail: "/assets/cute-ducklings-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("duckling", "character15", "idle", 20),
@@ -3407,7 +3440,7 @@ export const petRegistry = {
     name: "Classic Koala",
     species: "koala",
     character: "character01",
-    thumbnail: "/pets/koala/character01/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character01", "idle", 20),
@@ -3454,7 +3487,7 @@ export const petRegistry = {
     name: "Cheerful Koala",
     species: "koala",
     character: "character02",
-    thumbnail: "/pets/koala/character02/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character02", "idle", 20),
@@ -3501,7 +3534,7 @@ export const petRegistry = {
     name: "Sleepy Koala",
     species: "koala",
     character: "character03",
-    thumbnail: "/pets/koala/character03/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character03", "idle", 20),
@@ -3548,7 +3581,7 @@ export const petRegistry = {
     name: "Playful Koala",
     species: "koala",
     character: "character04",
-    thumbnail: "/pets/koala/character04/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character04", "idle", 20),
@@ -3595,7 +3628,7 @@ export const petRegistry = {
     name: "Shy Koala",
     species: "koala",
     character: "character05",
-    thumbnail: "/pets/koala/character05/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character05", "idle", 20),
@@ -3642,7 +3675,7 @@ export const petRegistry = {
     name: "Energetic Koala",
     species: "koala",
     character: "character06",
-    thumbnail: "/pets/koala/character06/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character06", "idle", 20),
@@ -3689,7 +3722,7 @@ export const petRegistry = {
     name: "Gentle Koala",
     species: "koala",
     character: "character07",
-    thumbnail: "/pets/koala/character07/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character07", "idle", 20),
@@ -3736,7 +3769,7 @@ export const petRegistry = {
     name: "Curious Koala",
     species: "koala",
     character: "character08",
-    thumbnail: "/pets/koala/character08/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character08", "idle", 20),
@@ -3783,7 +3816,7 @@ export const petRegistry = {
     name: "Brave Koala",
     species: "koala",
     character: "character09",
-    thumbnail: "/pets/koala/character09/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character09", "idle", 20),
@@ -3830,7 +3863,7 @@ export const petRegistry = {
     name: "Sweet Koala",
     species: "koala",
     character: "character10",
-    thumbnail: "/pets/koala/character10/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character10", "idle", 20),
@@ -3877,7 +3910,7 @@ export const petRegistry = {
     name: "Silly Koala",
     species: "koala",
     character: "character11",
-    thumbnail: "/pets/koala/character11/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character11", "idle", 20),
@@ -3924,7 +3957,7 @@ export const petRegistry = {
     name: "Wise Koala",
     species: "koala",
     character: "character12",
-    thumbnail: "/pets/koala/character12/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character12", "idle", 20),
@@ -3971,7 +4004,7 @@ export const petRegistry = {
     name: "Cool Koala",
     species: "koala",
     character: "character13",
-    thumbnail: "/pets/koala/character13/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character13", "idle", 20),
@@ -4018,7 +4051,7 @@ export const petRegistry = {
     name: "Warm Koala",
     species: "koala",
     character: "character14",
-    thumbnail: "/pets/koala/character14/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character14", "idle", 20),
@@ -4065,7 +4098,7 @@ export const petRegistry = {
     name: "Friendly Koala",
     species: "koala",
     character: "character15",
-    thumbnail: "/pets/koala/character15/thumbnail.png",
+    thumbnail: "/assets/cute-koalas-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("koala", "character15", "idle", 20),
@@ -4112,7 +4145,7 @@ export const petRegistry = {
     name: "Classic Pig",
     species: "pig",
     character: "character01",
-    thumbnail: "/pets/pig/character01/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character01", "idle", 20),
@@ -4159,7 +4192,7 @@ export const petRegistry = {
     name: "Cheerful Pig",
     species: "pig",
     character: "character02",
-    thumbnail: "/pets/pig/character02/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character02", "idle", 20),
@@ -4206,7 +4239,7 @@ export const petRegistry = {
     name: "Sleepy Pig",
     species: "pig",
     character: "character03",
-    thumbnail: "/pets/pig/character03/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character03", "idle", 20),
@@ -4253,7 +4286,7 @@ export const petRegistry = {
     name: "Playful Pig",
     species: "pig",
     character: "character04",
-    thumbnail: "/pets/pig/character04/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character04", "idle", 20),
@@ -4300,7 +4333,7 @@ export const petRegistry = {
     name: "Shy Pig",
     species: "pig",
     character: "character05",
-    thumbnail: "/pets/pig/character05/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character05", "idle", 20),
@@ -4347,7 +4380,7 @@ export const petRegistry = {
     name: "Energetic Pig",
     species: "pig",
     character: "character06",
-    thumbnail: "/pets/pig/character06/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character06", "idle", 20),
@@ -4394,7 +4427,7 @@ export const petRegistry = {
     name: "Gentle Pig",
     species: "pig",
     character: "character07",
-    thumbnail: "/pets/pig/character07/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character07", "idle", 20),
@@ -4441,7 +4474,7 @@ export const petRegistry = {
     name: "Curious Pig",
     species: "pig",
     character: "character08",
-    thumbnail: "/pets/pig/character08/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character08", "idle", 20),
@@ -4488,7 +4521,7 @@ export const petRegistry = {
     name: "Brave Pig",
     species: "pig",
     character: "character09",
-    thumbnail: "/pets/pig/character09/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character09", "idle", 20),
@@ -4535,7 +4568,7 @@ export const petRegistry = {
     name: "Sweet Pig",
     species: "pig",
     character: "character10",
-    thumbnail: "/pets/pig/character10/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character10", "idle", 20),
@@ -4582,7 +4615,7 @@ export const petRegistry = {
     name: "Silly Pig",
     species: "pig",
     character: "character11",
-    thumbnail: "/pets/pig/character11/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character11", "idle", 20),
@@ -4629,7 +4662,7 @@ export const petRegistry = {
     name: "Wise Pig",
     species: "pig",
     character: "character12",
-    thumbnail: "/pets/pig/character12/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character12", "idle", 20),
@@ -4676,7 +4709,7 @@ export const petRegistry = {
     name: "Cool Pig",
     species: "pig",
     character: "character13",
-    thumbnail: "/pets/pig/character13/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character13", "idle", 20),
@@ -4723,7 +4756,7 @@ export const petRegistry = {
     name: "Warm Pig",
     species: "pig",
     character: "character14",
-    thumbnail: "/pets/pig/character14/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character14", "idle", 20),
@@ -4770,7 +4803,7 @@ export const petRegistry = {
     name: "Friendly Pig",
     species: "pig",
     character: "character15",
-    thumbnail: "/pets/pig/character15/thumbnail.png",
+    thumbnail: "/assets/cute-pigs-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("pig", "character15", "idle", 20),
@@ -4817,7 +4850,7 @@ export const petRegistry = {
     name: "Classic Raccoon",
     species: "raccoon",
     character: "character01",
-    thumbnail: "/pets/raccoon/character01/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character01", "idle", 20),
@@ -4864,7 +4897,7 @@ export const petRegistry = {
     name: "Cheerful Raccoon",
     species: "raccoon",
     character: "character02",
-    thumbnail: "/pets/raccoon/character02/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character02", "idle", 20),
@@ -4911,7 +4944,7 @@ export const petRegistry = {
     name: "Sleepy Raccoon",
     species: "raccoon",
     character: "character03",
-    thumbnail: "/pets/raccoon/character03/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character03", "idle", 20),
@@ -4958,7 +4991,7 @@ export const petRegistry = {
     name: "Playful Raccoon",
     species: "raccoon",
     character: "character04",
-    thumbnail: "/pets/raccoon/character04/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character04", "idle", 20),
@@ -5005,7 +5038,7 @@ export const petRegistry = {
     name: "Shy Raccoon",
     species: "raccoon",
     character: "character05",
-    thumbnail: "/pets/raccoon/character05/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character05", "idle", 20),
@@ -5052,7 +5085,7 @@ export const petRegistry = {
     name: "Energetic Raccoon",
     species: "raccoon",
     character: "character06",
-    thumbnail: "/pets/raccoon/character06/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character06", "idle", 20),
@@ -5099,7 +5132,7 @@ export const petRegistry = {
     name: "Gentle Raccoon",
     species: "raccoon",
     character: "character07",
-    thumbnail: "/pets/raccoon/character07/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character07", "idle", 20),
@@ -5146,7 +5179,7 @@ export const petRegistry = {
     name: "Curious Raccoon",
     species: "raccoon",
     character: "character08",
-    thumbnail: "/pets/raccoon/character08/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character08", "idle", 20),
@@ -5193,7 +5226,7 @@ export const petRegistry = {
     name: "Brave Raccoon",
     species: "raccoon",
     character: "character09",
-    thumbnail: "/pets/raccoon/character09/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character09", "idle", 20),
@@ -5240,7 +5273,7 @@ export const petRegistry = {
     name: "Sweet Raccoon",
     species: "raccoon",
     character: "character10",
-    thumbnail: "/pets/raccoon/character10/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character10", "idle", 20),
@@ -5287,7 +5320,7 @@ export const petRegistry = {
     name: "Silly Raccoon",
     species: "raccoon",
     character: "character11",
-    thumbnail: "/pets/raccoon/character11/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character11", "idle", 20),
@@ -5334,7 +5367,7 @@ export const petRegistry = {
     name: "Wise Raccoon",
     species: "raccoon",
     character: "character12",
-    thumbnail: "/pets/raccoon/character12/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character12", "idle", 20),
@@ -5381,7 +5414,7 @@ export const petRegistry = {
     name: "Cool Raccoon",
     species: "raccoon",
     character: "character13",
-    thumbnail: "/pets/raccoon/character13/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character13", "idle", 20),
@@ -5428,7 +5461,7 @@ export const petRegistry = {
     name: "Warm Raccoon",
     species: "raccoon",
     character: "character14",
-    thumbnail: "/pets/raccoon/character14/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character14", "idle", 20),
@@ -5475,7 +5508,7 @@ export const petRegistry = {
     name: "Friendly Raccoon",
     species: "raccoon",
     character: "character15",
-    thumbnail: "/pets/raccoon/character15/thumbnail.png",
+    thumbnail: "/assets/cute-raccoons-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("raccoon", "character15", "idle", 20),
@@ -5522,7 +5555,7 @@ export const petRegistry = {
     name: "Classic Beaver",
     species: "beaver",
     character: "character01",
-    thumbnail: "/pets/beaver/character01/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character01", "idle", 20),
@@ -5569,7 +5602,7 @@ export const petRegistry = {
     name: "Cheerful Beaver",
     species: "beaver",
     character: "character02",
-    thumbnail: "/pets/beaver/character02/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character02", "idle", 20),
@@ -5616,7 +5649,7 @@ export const petRegistry = {
     name: "Sleepy Beaver",
     species: "beaver",
     character: "character03",
-    thumbnail: "/pets/beaver/character03/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character03", "idle", 20),
@@ -5663,7 +5696,7 @@ export const petRegistry = {
     name: "Playful Beaver",
     species: "beaver",
     character: "character04",
-    thumbnail: "/pets/beaver/character04/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character04", "idle", 20),
@@ -5710,7 +5743,7 @@ export const petRegistry = {
     name: "Shy Beaver",
     species: "beaver",
     character: "character05",
-    thumbnail: "/pets/beaver/character05/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character05", "idle", 20),
@@ -5757,7 +5790,7 @@ export const petRegistry = {
     name: "Energetic Beaver",
     species: "beaver",
     character: "character06",
-    thumbnail: "/pets/beaver/character06/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character06", "idle", 20),
@@ -5804,7 +5837,7 @@ export const petRegistry = {
     name: "Gentle Beaver",
     species: "beaver",
     character: "character07",
-    thumbnail: "/pets/beaver/character07/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character07", "idle", 20),
@@ -5851,7 +5884,7 @@ export const petRegistry = {
     name: "Curious Beaver",
     species: "beaver",
     character: "character08",
-    thumbnail: "/pets/beaver/character08/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character08", "idle", 20),
@@ -5898,7 +5931,7 @@ export const petRegistry = {
     name: "Brave Beaver",
     species: "beaver",
     character: "character09",
-    thumbnail: "/pets/beaver/character09/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character09", "idle", 20),
@@ -5945,7 +5978,7 @@ export const petRegistry = {
     name: "Sweet Beaver",
     species: "beaver",
     character: "character10",
-    thumbnail: "/pets/beaver/character10/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character10", "idle", 20),
@@ -5992,7 +6025,7 @@ export const petRegistry = {
     name: "Silly Beaver",
     species: "beaver",
     character: "character11",
-    thumbnail: "/pets/beaver/character11/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character11", "idle", 20),
@@ -6039,7 +6072,7 @@ export const petRegistry = {
     name: "Wise Beaver",
     species: "beaver",
     character: "character12",
-    thumbnail: "/pets/beaver/character12/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character12", "idle", 20),
@@ -6086,7 +6119,7 @@ export const petRegistry = {
     name: "Cool Beaver",
     species: "beaver",
     character: "character13",
-    thumbnail: "/pets/beaver/character13/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character13", "idle", 20),
@@ -6133,7 +6166,7 @@ export const petRegistry = {
     name: "Warm Beaver",
     species: "beaver",
     character: "character14",
-    thumbnail: "/pets/beaver/character14/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character14", "idle", 20),
@@ -6180,7 +6213,7 @@ export const petRegistry = {
     name: "Friendly Beaver",
     species: "beaver",
     character: "character15",
-    thumbnail: "/pets/beaver/character15/thumbnail.png",
+    thumbnail: "/assets/funny-beavers-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("beaver", "character15", "idle", 20),
@@ -6227,7 +6260,7 @@ export const petRegistry = {
     name: "Classic Red Panda",
     species: "redpanda",
     character: "character01",
-    thumbnail: "/pets/redpanda/character01/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character01/Idle/Characters-Character01-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character01", "idle", 20),
@@ -6278,7 +6311,7 @@ export const petRegistry = {
     name: "Cheerful Red Panda",
     species: "redpanda",
     character: "character02",
-    thumbnail: "/pets/redpanda/character02/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character02/Idle/Characters-Character02-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character02", "idle", 20),
@@ -6329,7 +6362,7 @@ export const petRegistry = {
     name: "Sleepy Red Panda",
     species: "redpanda",
     character: "character03",
-    thumbnail: "/pets/redpanda/character03/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character03/Idle/Characters-Character03-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character03", "idle", 20),
@@ -6380,7 +6413,7 @@ export const petRegistry = {
     name: "Playful Red Panda",
     species: "redpanda",
     character: "character04",
-    thumbnail: "/pets/redpanda/character04/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character04/Idle/Characters-Character04-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character04", "idle", 20),
@@ -6431,7 +6464,7 @@ export const petRegistry = {
     name: "Shy Red Panda",
     species: "redpanda",
     character: "character05",
-    thumbnail: "/pets/redpanda/character05/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character05/Idle/Characters-Character05-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character05", "idle", 20),
@@ -6482,7 +6515,7 @@ export const petRegistry = {
     name: "Energetic Red Panda",
     species: "redpanda",
     character: "character06",
-    thumbnail: "/pets/redpanda/character06/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character06/Idle/Characters-Character06-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character06", "idle", 20),
@@ -6533,7 +6566,7 @@ export const petRegistry = {
     name: "Gentle Red Panda",
     species: "redpanda",
     character: "character07",
-    thumbnail: "/pets/redpanda/character07/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character07/Idle/Characters-Character07-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character07", "idle", 20),
@@ -6584,7 +6617,7 @@ export const petRegistry = {
     name: "Curious Red Panda",
     species: "redpanda",
     character: "character08",
-    thumbnail: "/pets/redpanda/character08/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character08/Idle/Characters-Character08-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character08", "idle", 20),
@@ -6635,7 +6668,7 @@ export const petRegistry = {
     name: "Brave Red Panda",
     species: "redpanda",
     character: "character09",
-    thumbnail: "/pets/redpanda/character09/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character09/Idle/Characters-Character09-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character09", "idle", 20),
@@ -6686,7 +6719,7 @@ export const petRegistry = {
     name: "Sweet Red Panda",
     species: "redpanda",
     character: "character10",
-    thumbnail: "/pets/redpanda/character10/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character10/Idle/Characters-Character10-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character10", "idle", 20),
@@ -6737,7 +6770,7 @@ export const petRegistry = {
     name: "Silly Red Panda",
     species: "redpanda",
     character: "character11",
-    thumbnail: "/pets/redpanda/character11/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character11/Idle/Characters-Character11-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character11", "idle", 20),
@@ -6788,7 +6821,7 @@ export const petRegistry = {
     name: "Wise Red Panda",
     species: "redpanda",
     character: "character12",
-    thumbnail: "/pets/redpanda/character12/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character12/Idle/Characters-Character12-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character12", "idle", 20),
@@ -6839,7 +6872,7 @@ export const petRegistry = {
     name: "Cool Red Panda",
     species: "redpanda",
     character: "character13",
-    thumbnail: "/pets/redpanda/character13/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character13/Idle/Characters-Character13-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character13", "idle", 20),
@@ -6890,7 +6923,7 @@ export const petRegistry = {
     name: "Warm Red Panda",
     species: "redpanda",
     character: "character14",
-    thumbnail: "/pets/redpanda/character14/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character14/Idle/Characters-Character14-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character14", "idle", 20),
@@ -6941,7 +6974,7 @@ export const petRegistry = {
     name: "Friendly Red Panda",
     species: "redpanda",
     character: "character15",
-    thumbnail: "/pets/redpanda/character15/thumbnail.png",
+    thumbnail: "/assets/red-pandas-assets/Png/Character15/Idle/Characters-Character15-Idle_00.png",
     animations: {
       idle: {
         frames: generateFramePaths("redpanda", "character15", "idle", 20),
@@ -7005,8 +7038,7 @@ export const animationPacks = {
     key: "walk",
     name: "Walk Cycle",
     description: "Watch your pet take a stroll",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    price: 50,
     compatible: "all",
   },
   "roll-pack": {
@@ -7014,8 +7046,7 @@ export const animationPacks = {
     key: "roll",
     name: "Roll Animation",
     description: "Your pet does a playful roll",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    price: 75,
     compatible: "all",
   },
   "fly-pack": {
@@ -7023,17 +7054,15 @@ export const animationPacks = {
     key: "fly",
     name: "Fly Animation",
     description: "Watch your pet soar through the air",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    price: 100,
     compatible: "all",
   },
   "jump-pack": {
     id: "jump-pack",
     key: "jump",
     name: "Jump Celebration",
-    description: "Your pet jumps for joy",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    description: "Your pet jumps for joy (task completion reaction)",
+    price: 0,
     compatible: "all",
   },
   "throwing-pack": {
@@ -7041,8 +7070,7 @@ export const animationPacks = {
     key: "throwing",
     name: "Throwing Animation",
     description: "Your pet throws something",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    price: 80,
     compatible: "all",
   },
   "hit-pack": {
@@ -7050,8 +7078,7 @@ export const animationPacks = {
     key: "hit",
     name: "Hit/Hurt Reaction",
     description: "Your pet shows concern",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    price: 60,
     compatible: "all",
   },
   "dead-pack": {
@@ -7059,8 +7086,7 @@ export const animationPacks = {
     key: "dead",
     name: "Sleep/Rest Animation",
     description: "Your pet takes a rest",
-    price: 0, // Free for testing
-    owned: true, // Owned for testing
+    price: 90,
     compatible: "all",
   },
 };
@@ -7079,7 +7105,8 @@ export function getPetsBySpecies(species) {
 }
 
 export function getAllAnimationPacks() {
-  return Object.values(animationPacks);
+  // Filter out jump animation (used only for task completion reactions)
+  return Object.values(animationPacks).filter(pack => pack.key !== 'jump');
 }
 
 export function getAnimationPack(packId) {

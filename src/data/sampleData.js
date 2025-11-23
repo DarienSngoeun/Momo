@@ -2,7 +2,7 @@ export const seedTasks = [];
 
 export const seedUser = {
   username: "DemoUser",
-  coins: 500,
+  coins: 1000,
   streak: {
     current: 0,
     longest: 0,
