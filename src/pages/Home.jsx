@@ -1,7 +1,13 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Plus, ArrowRight, ShoppingCart } from "lucide-react";
-import { startOfToday, parseISO } from "date-fns";
+import { Plus, ArrowRight, ShoppingCart, AlertCircle } from "lucide-react";
+import {
+  startOfToday,
+  parseISO,
+  isBefore,
+  startOfDay,
+  isToday,
+} from "date-fns";
 import { Container } from "../components/layout/Container";
 import { ThemedPetDisplay } from "../components/pet/ThemedPetDisplay";
 import { CoinsBadge } from "../components/progress/CoinsBadge";
@@ -16,15 +22,16 @@ function Home() {
   const activePetId = usePetStore((state) => state.activePetId);
   const activeIdleKey = usePetStore((state) => state.activeIdleKey);
 
-  // Calculate today's tasks inline
+  // Calculate today's tasks inline (includes overdue tasks)
   const todayTasks = useMemo(() => {
     const today = startOfToday();
     return tasks.filter((task) => {
       if (task.status === "done") return false;
       if (task.timeframe === "today") return true;
       if (task.dueDate) {
-        const dueDate = parseISO(task.dueDate);
-        return dueDate.toDateString() === today.toDateString();
+        const dueDate = startOfDay(parseISO(task.dueDate));
+        // Show tasks due today or overdue (before today)
+        return isToday(dueDate) || isBefore(dueDate, today);
       }
       return false;
     });
@@ -102,34 +109,62 @@ function Home() {
           </div>
         ) : (
           <div className="space-y-2">
-            {todayTasks.slice(0, 3).map((task) => (
-              <Link
-                key={task.id}
-                to="/tasks"
-                className="block bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{task.title}</h3>
-                    {task.description && (
-                      <p className="text-sm text-gray-600 mt-1 text-truncate-2">
-                        {task.description}
-                      </p>
-                    )}
+            {todayTasks.slice(0, 3).map((task) => {
+              // Check if task is overdue
+              const isOverdue =
+                task.status === "open" &&
+                task.dueDate &&
+                task.dueTime &&
+                isBefore(
+                  parseISO(`${task.dueDate}T${task.dueTime}`),
+                  new Date()
+                );
+
+              return (
+                <Link
+                  key={task.id}
+                  to="/tasks"
+                  className="block bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span
+                          className={`
+                            px-2 py-1 rounded text-xs font-medium text-white shrink-0
+                            ${
+                              task.priority === "high" ? "bg-priority-high" : ""
+                            }
+                            ${
+                              task.priority === "medium"
+                                ? "bg-priority-medium"
+                                : ""
+                            }
+                            ${task.priority === "low" ? "bg-priority-low" : ""}
+                          `}
+                        >
+                          {task.priority}
+                        </span>
+                        {isOverdue && (
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white bg-red-500 shrink-0">
+                            <AlertCircle size={12} />
+                            OVERDUE
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-medium text-gray-900">
+                        {task.title}
+                      </h3>
+                      {task.description && (
+                        <p className="text-sm text-gray-600 mt-1 text-truncate-2">
+                          {task.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <span
-                    className={`
-                      ml-2 px-2 py-1 rounded text-xs font-medium text-white shrink-0
-                      ${task.priority === "high" ? "bg-priority-high" : ""}
-                      ${task.priority === "medium" ? "bg-priority-medium" : ""}
-                      ${task.priority === "low" ? "bg-priority-low" : ""}
-                    `}
-                  >
-                    {task.priority}
-                  </span>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
             {todayTasks.length > 3 && (
               <Link
                 to="/tasks"

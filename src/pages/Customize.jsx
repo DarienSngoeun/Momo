@@ -45,7 +45,7 @@ function Customize() {
       </div>
 
       {/* Live Preview - Sticky */}
-      <div className="sticky top-0 z-20 bg-gray-50 pb-4 mb-4">
+      <div className="sticky top-12 z-20 bg-gray-50 pb-4 mb-4">
         <LivePreview />
       </div>
 
