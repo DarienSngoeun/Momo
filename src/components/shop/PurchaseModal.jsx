@@ -1,6 +1,6 @@
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
-import { Coins } from 'lucide-react';
+import { HandCoins } from 'lucide-react';
 import { useUserStore } from '../../store/useUserStore';
 
 export function PurchaseModal({ isOpen, onClose, onConfirm, item, type = 'pet' }) {
@@ -34,14 +34,14 @@ export function PurchaseModal({ isOpen, onClose, onConfirm, item, type = 'pet' }
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-gray-600">Price:</span>
             <div className="flex items-center gap-1 font-semibold text-gray-900">
-              <Coins size={16} className="text-accent-cozy" />
+              <HandCoins size={16} className="text-accent-cozy" />
               {price}
             </div>
           </div>
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-gray-600">Your balance:</span>
             <div className="flex items-center gap-1 font-semibold text-gray-900">
-              <Coins size={16} className="text-accent-cozy" />
+              <HandCoins size={16} className="text-accent-cozy" />
               {coins}
             </div>
           </div>
@@ -49,7 +49,7 @@ export function PurchaseModal({ isOpen, onClose, onConfirm, item, type = 'pet' }
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-600">After purchase:</span>
               <div className={`flex items-center gap-1 font-semibold ${canAfford ? 'text-green-600' : 'text-red-600'}`}>
-                <Coins size={16} className="text-accent-cozy" />
+                <HandCoins size={16} className="text-accent-cozy" />
                 {remainingCoins}
               </div>
             </div>

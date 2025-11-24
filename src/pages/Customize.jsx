@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { Container } from "../components/layout/Container";
 import { LivePreview } from "../components/customize/LivePreview";
 import { OwnedPetsGrid } from "../components/customize/OwnedPetsGrid";
@@ -38,7 +38,7 @@ function Customize() {
             className="p-2 rounded-lg bg-accent-warm text-white hover:bg-accent-cozy transition-colors shadow-sm flex items-center gap-2"
             aria-label="Shop"
           >
-            <ShoppingBag size={20} />
+            <ShoppingCart size={20} />
             <span className="text-sm font-medium">Shop</span>
           </Link>
         </div>

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Plus, ArrowRight, ShoppingBag } from "lucide-react";
+import { Plus, ArrowRight, ShoppingCart } from "lucide-react";
 import { startOfToday, parseISO } from "date-fns";
 import { Container } from "../components/layout/Container";
 import { ThemedPetDisplay } from "../components/pet/ThemedPetDisplay";
@@ -45,7 +45,7 @@ function Home() {
           className="p-3 rounded-xl bg-accent-warm text-white hover:bg-accent-cozy transition-colors shadow-sm"
           aria-label="Shop"
         >
-          <ShoppingBag size={24} />
+          <ShoppingCart size={24} />
         </Link>
       </div>
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Award, Flame, Coins, Calendar, CheckCircle, Edit2 } from 'lucide-react';
+import { User, Award, Flame, HandCoins, Calendar, CheckCircle, Edit2 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Container } from '../components/layout/Container';
 import { Button } from '../components/ui/Button';
@@ -62,7 +62,7 @@ function Profile() {
     },
     {
       id: 'coins',
-      icon: Coins,
+      icon: HandCoins,
       label: 'Total Coins',
       value: coins,
       color: 'text-yellow-600',

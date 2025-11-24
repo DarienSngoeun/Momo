@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { Home, CheckSquare, Calendar, Palette, Settings } from "lucide-react";
+import { Home, CheckSquare, Calendar, Shirt, Settings } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/tasks", icon: CheckSquare, label: "Tasks" },
   { to: "/calendar", icon: Calendar, label: "Calendar" },
-  { to: "/customize", icon: Palette, label: "Customize" },
+  { to: "/customize", icon: Shirt, label: "Customize" },
   { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
